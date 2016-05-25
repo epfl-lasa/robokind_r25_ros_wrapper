@@ -3,6 +3,10 @@ import org.robokind.api.motion.messaging.RemoteRobot;
 import org.robokind.api.speech.messaging.RemoteSpeechServiceClient;
 
 import static org.robokind.api.motion.Robot.*;
+import static org.robokind.client.basic.RobotJoints.LEFT_HAND_GRASP;
+import static org.robokind.client.basic.RobotJoints.LEFT_SHOULDER_PITCH;
+import static org.robokind.client.basic.RobotJoints.LEFT_SHOULDER_ROLL;
+import static org.robokind.client.basic.RobotJoints.LEFT_WRIST_YAW;
 
 import org.robokind.api.common.position.NormalizedDouble;
 import org.robokind.api.motion.Joint;
@@ -32,116 +36,67 @@ public class InteractionDemo {
         	
         	Letters letters = new Letters();
         	
-    		mySpeaker.speak("Hi! Would you like to play a Letter game?");
-    		Robokind.sleep(900);
-    		expression.smile(700, myRobot);
-    		//expression.blink(500, myRobot);
-    		Robokind.sleep(400);
-    		mySpeaker.speak("I will point you to the rectangels and squares placed on the table and you have to construct letters from them");
-    		Robokind.sleep(3000);
-    		mySpeaker.speak("Lets start the game!");
-    		Robokind.sleep(800);
-        	letters.describeLetter("T", 12000, mySpeaker, myRobot);
+//    		mySpeaker.speak("Hi! Would you like to play a Letter game?");
+//    		Robokind.sleep(900);
+//    		expression.smile(700, myRobot);
+//    		//expression.blink(500, myRobot);
+//    		Robokind.sleep(400);
+//    		mySpeaker.speak("I will point you to the rectangels and squares placed on the table and you have to construct letters from them");
+//    		Robokind.sleep(3000);
+//    		mySpeaker.speak("Lets start the game!");
+//    		Robokind.sleep(800);
+//        	letters.describeLetter("T", 12000, mySpeaker, myRobot);
 
-        	
-            // set up expression joints
-
-//            
-//            int column = 4;
-//            int rows = 3;
-//            
-//            double unit_column_value = (1.0 / column);
-//            double unit_row_value = (1 / rows);
+            double default_neck_pitch_position = 0.4;
+            double left_shoulder_pitch_min = 0.185;
+            double left_shoulder_pitch_max = 1;
             
-//            [column -3, row - 1]
-//            
-//            		
-//            double column_position =  (4 * unit_column_value) - (unit_column_value / 2);
-//            double row_position =  (3 * unit_row_value) - (unit_row_value / 2);
-//            System.out.println(column_position);
-//            System.out.println(row_position);
-//            
-//            myGoalPositions = new RobotPositionHashMap();
-//			JointId neck_yaw_Id = new JointId(myRobot.getRobotId(), new Joint.Id(202));
-//			JointId neck_pitch_Id = new JointId(myRobot.getRobotId(), new Joint.Id(200));
-//			JointId eyelids_Id = new JointId(myRobot.getRobotId(), new Joint.Id(301));
-//			JointId brows_Id = new JointId(myRobot.getRobotId(), new Joint.Id(300));
-//			JointId eyes_pitch_Id = new JointId(myRobot.getRobotId(), new Joint.Id(311));
-//			
+            // object position with respect to the robot
+            double x = 20;
+            double z = 30;
+            double y = 50;
+            
+            double d = Math.sqrt(Math.pow(x,2) + Math.pow(z,2)); 
+            
+            JointId neck_pitch_Id = new JointId(myRobot.getRobotId(), new Joint.Id(200));
+            JointId neck_yaw_Id = new JointId(myRobot.getRobotId(), new Joint.Id(202));
+            JointId brows_Id = new JointId(myRobot.getRobotId(), new Joint.Id(300));
+            JointId left_elbow_yaw_Id = new JointId(myRobot.getRobotId(), new Joint.Id(410));
+            JointId left_elbow_pitch_Id = new JointId(myRobot.getRobotId(), new Joint.Id(411));
+            JointId left_shoulder_pitch_Id = new JointId(myRobot.getRobotId(), new Joint.Id(400));
+            JointId left_shoulder_roll_Id = new JointId(myRobot.getRobotId(), new Joint.Id(401));
+            JointId left_wrist_yaw_Id = new JointId(myRobot.getRobotId(), new Joint.Id(420));
+            JointId left_hand_grasp_Id = new JointId(myRobot.getRobotId(), new Joint.Id(421));
 
-//		    myGoalPositions.put(brows_Id, new NormalizedDouble(row_position));
-//		    myRobot.move(myGoalPositions, 400);
-//		    
-//		    myGoalPositions.put(neck_yaw_Id, new NormalizedDouble(column_position));
-//		    myRobot.move(myGoalPositions, 500);
-//
-//		    myGoalPositions.put(neck_pitch_Id, new NormalizedDouble(0.8));
-//		    myRobot.move(myGoalPositions, 400);
-//		    myGoalPositions.put(neck_yaw_Id, new NormalizedDouble(0.1));
-//		    myRobot.move(myGoalPositions, 400);
-//		    myGoalPositions.put(brows_Id, new NormalizedDouble(0.1));
-//		    myRobot.move(myGoalPositions, 400);
-//		    myGoalPositions.put(eyelids_Id, new NormalizedDouble(0.8));
-//		    myRobot.move(myGoalPositions, 400);
-//		    
-//		    myGoalPositions.put(eyelids_Id, new NormalizedDouble(unit_row_value));
-//		    myRobot.move(myGoalPositions, 400);
-//
-//		    myGoalPositions.put(eyes_pitch_Id, new NormalizedDouble(unit_row_value));
-//		    myRobot.move(myGoalPositions, 400);
-			
-//		    Robokind.sleep(200);
+            
+            double angle_v = Math.toDegrees(Math.atan(d/y));
+            double angle_h = Math.toDegrees(Math.atan(x/z));
+            
+            System.out.println(angle_h);
+            
+            double brows_value =  angle_v / 180;
+            double neck_pitch_value = default_neck_pitch_position * angle_v / 90;
+            double neck_yaw_value = (90 + angle_h) / 180;
+            
+            System.out.println(neck_yaw_value);
+            Robokind.sleep(400);
+            myGoalPositions = new RobotPositionHashMap();
+		    myGoalPositions.put(neck_pitch_Id, new NormalizedDouble(neck_yaw_value));
+            myGoalPositions.put(neck_yaw_Id, new NormalizedDouble(neck_pitch_value));;
+		    myGoalPositions.put(brows_Id, new NormalizedDouble(brows_value));
+		    myRobot.move(myGoalPositions, 400);
+
+		   
+		    myGoalPositions.put(left_elbow_yaw_Id, new NormalizedDouble(0.3));
+		    myGoalPositions.put(left_shoulder_pitch_Id, new NormalizedDouble(0.8));
 		    
-//            Expression expression = new Expression();
-//            expression.setExpressionJoints(myRobot);
-            
-            // expression test
-//            expression.lookDown(400, myRobot);
-//            Robokind.sleep(200);
-//            expression.gentleLookUp(400, myRobot);
-//            Robokind.sleep(200);
-            
-//	          expression.lookRight(500, myRobot);
-//	          Robokind.sleep(200);
-//	          expression.lookLeft(500, myRobot);
-//	          Robokind.sleep(200);
-            
-              
-
-            
-            
-//  		  public final static int NECK_PITCH = 202;
-//            public final static int NECK_YAW = 200;
-//            /**
-//             * Neck Roll.
-//             */
-//            public final static int NECK_ROLL = 201;
-//			  public final static int BROWS = 300;
-//  		  public final static int EYELIDS = 301;
-            
-//		    public final static int EYES_PITCH = 310;
-//		    /**
-//		     * Eye Left.
-//		     */
-//		    public final static int LEFT_EYE_YAW = 311;
-//		    /**
-//		     * Eye Right.
-//		     */
-//		    public final static int RIGHT_EYE_YAW = 312;
+		    myGoalPositions.put(left_wrist_yaw_Id, new NormalizedDouble(0));
+		    myRobot.move(myGoalPositions, 400);
+		    Robokind.sleep(800);
 		    
-//            expression.frown(400, myRobot);
-//            Robokind.sleep(200);           
-//            expression.smile(200, myRobot);
-//            Robokind.sleep(200);
-//            expression.closeEyes(200, myRobot);
-//            Robokind.sleep(300);
-//            expression.shakeHead(300, myRobot);
-//            Robokind.sleep(200);
-//            expression.openEyes(200, myRobot);
-//            Robokind.sleep(300);                
+//		    myGoalPositions = myRobot.getDefaultPositions();
+//          myRobot.move(myGoalPositions, 1000);
 
-//            expression.nod(400, myRobot);
-//            Robokind.sleep(200); 
         	
             ///////////////////////////////////////////
             /// DISCONNECT AND EXIT

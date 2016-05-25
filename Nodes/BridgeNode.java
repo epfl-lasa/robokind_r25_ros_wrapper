@@ -90,7 +90,8 @@ public class BridgeNode extends AbstractNodeMain {
 		// robot output publisher
 		final Publisher<OutputMsg> robotOutputPublisher = connectedNode.newPublisher("/robot/output",
 				rosjava_r25_msgs.OutputMsg._TYPE);
-
+		
+//		// attention tracker subsrier
 //		final Subscriber<tf2_msgs.TFMessage> attentiontrackerSubscriber = connectedNode.newSubscriber("/tf",
 //				tf2_msgs.TFMessage._TYPE);
 //

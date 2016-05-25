@@ -147,7 +147,6 @@ public class Robot {
 		public void handleEvent(FilteredVector3Event t) {
 			Vector3Event v = t.getFilteredVector();
 			Vector3Event r = t.getRawVector();
-			return v;
 			System.out.println("Accelerometer (f): " + v.getX() + ", " + v.getY() + ", " + v.getZ());
 			System.out.println("Accelerometer (r): " + r.getX() + ", " + r.getY() + ", " + r.getZ());
 		}
